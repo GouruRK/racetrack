@@ -21,13 +21,6 @@ class Colors:
             g1 += gdelta
             b1 += bdelta
             res.append(Colors(r1, g1, b1))
-        # h, _, _ = self.hsv
-        # padding = 1/max_iter
-        # res = []
-        # for _ in range(max_iter):
-        #     h += padding
-        #     color = Colors(*map(lambda e: int(e*255), colorsys.hsv_to_rgb(h, 1, 1)))
-        #     res.append(color)
         return res
 
     def __str__(self):

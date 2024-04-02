@@ -2,9 +2,8 @@ import src.fltk as fltk
 from src.board import Cell, Board
 from src.tools import distance
 from src.color import Color
+from src.settings import BLOCK_SIZE, RADIUS
 
-BLOCK_SIZE = 50
-RADIUS = BLOCK_SIZE*0.75
 PRADIUS = 5
 
 COLORS = {
@@ -95,15 +94,6 @@ def draw_trajectory(board: Board):
         tags.append(fltk.cercle(bx, by, PRADIUS, remplissage=color))
         tags.append(fltk.ligne(ax, ay, bx, by, epaisseur=2, couleur=color))
     return tags
-    y = 0
-    x = 0
-    for i, color in enumerate(PALETTE):
-        fltk.rectangle(x*32, y*32, (x + 1)*32, (y + 1)*32, remplissage=color.hex())
-        x += 1
-        if i % 10 == 9:
-            y += 1
-            x = 0
-    return []
 
 def create_window_board(board: list[str]):
     fltk.cree_fenetre(*map_coordinates(len(board[0]) - 2, len(board) - 1))

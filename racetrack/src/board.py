@@ -38,11 +38,12 @@ class Board:
         self.traj = set()
         self.start = set()
         self.end = set()
+        self.obstacles = set()
         self.legal = set()
         self.image = image
         self.spacing = spacing
 
-    def next_coords(self):
+    def next_coords(self) -> set[Cell]:
         targets = set()
         if not len(self.trajectory):
             targets = self.start
@@ -54,6 +55,14 @@ class Board:
             vector = Cell(a.x - b.x, a.y - b.y)
             targets = (self.trajectory[-1] + vector).neighbour()
         return (targets & self.legal) - self.traj
+
+    def filter_image_obstacles(self, start: Cell, dest: Cell) -> bool:
+        return True
+
+    def filter_obstacles(self, start: Cell, dest: Cell) -> bool:
+        if self.image:
+            return self.filter_image_obstacles(start, dest)
+        return True
 
     def append(self, cell: Cell):
         self.trajectory.append(cell)
@@ -76,6 +85,8 @@ class Board:
                     res.start.add(Cell(x, y))
                 elif char == '*':
                     res.end.add(Cell(x, y))
+                elif char == '#':
+                    res.obstacles.add(Cell(x, y))
                 if char != '#':
                     res.legal.add(Cell(x, y))
         return res
