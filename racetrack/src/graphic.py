@@ -12,8 +12,7 @@ COLORS = {
     '*': "grey"
 }
 
-PALETTE = Color.BLUE.gradient(Color.RED, 30)[::-1]
-GRADIENTS = PALETTE
+GRADIENTS = Color.BLUE.gradient(Color.RED, 30)
 
 def map_coordinates(x, y) -> tuple[int, int]:
     return x*BLOCK_SIZE, y*BLOCK_SIZE
@@ -73,8 +72,10 @@ def erase_tags(tags: list[int]):
         fltk.efface(tag)
 
 def get_color(a: Cell, b: Cell) -> Color:
-    dist = int(distance(a, b)*100) % len(GRADIENTS)
-    return GRADIENTS[-dist]
+    dist = int(distance(a, b))*10
+    if dist >= len(GRADIENTS):
+        return Color.RED
+    return GRADIENTS[dist]
 
 def draw_trajectory(board: Board):
     spacing = get_spacing(board)
