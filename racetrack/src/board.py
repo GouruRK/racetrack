@@ -35,7 +35,6 @@ class Board:
     
     def __init__(self, image: PhotoImage = None, spacing: int = 0) -> None:
         self.trajectory = []
-        self.traj = set()
         self.start = set()
         self.end = set()
         self.obstacles = set()
@@ -43,18 +42,21 @@ class Board:
         self.image = image
         self.spacing = spacing
 
-    def next_coords(self) -> set[Cell]:
+    def next_coords(self, trajectory: list[Cell] = None) -> set[Cell]:
+        if trajectory is None:
+            trajectory = self.trajectory
+        
         targets = set()
-        if not len(self.trajectory):
+        if not len(trajectory):
             targets = self.start
-        elif len(self.trajectory) == 1:
-            targets = self.trajectory[-1].neighbour()
+        elif len(trajectory) == 1:
+            targets = trajectory[-1].neighbour()
         else:
-            a = self.trajectory[-1]
-            b = self.trajectory[-2]
+            a = trajectory[-1]
+            b = trajectory[-2]
             vector = Cell(a.x - b.x, a.y - b.y)
-            targets = (self.trajectory[-1] + vector).neighbour()
-        return (targets & self.legal) - self.traj
+            targets = (trajectory[-1] + vector).neighbour()
+        return (targets & self.legal) - set(trajectory)
 
     def filter_image_obstacles(self, start: Cell, dest: Cell) -> bool:
         return True
@@ -66,12 +68,10 @@ class Board:
 
     def append(self, cell: Cell):
         self.trajectory.append(cell)
-        self.traj.add(cell)
 
     def pop(self):
         if self.trajectory:
             cell = self.trajectory.pop()
-            self.traj.remove(cell)
             return cell
 
     def win(self):

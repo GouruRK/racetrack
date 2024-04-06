@@ -53,9 +53,22 @@ def get_spacing(board: Board) -> int:
     else:
         return BLOCK_SIZE
 
+def next_event() -> str:
+    ev = None
+    tev = None
+    while True:
+        ev = fltk.donne_ev()
+        tev = fltk.type_ev(ev)
+        if tev is not None:
+            if tev == "Touche":
+                return fltk.touche(ev)
+            return tev
+        fltk.mise_a_jour()
+
 def draw_points(points: set[Cell], board: Board) -> list[int]:
     spacing = get_spacing(board)
-    return [fltk.cercle(cell.x*spacing, cell.y*spacing, PRADIUS, remplissage="white")
+    return [fltk.cercle(cell.x*spacing, cell.y*spacing, PRADIUS,
+                        remplissage="white")
             for cell in points]
 
 def get_cell_from_click(points: set[Cell], board: Board) -> Cell:
@@ -77,15 +90,15 @@ def get_color(a: Cell, b: Cell) -> Color:
         return Color.RED
     return GRADIENTS[dist]
 
-def draw_trajectory(board: Board):
+def draw_trajectory(trajectory: list[Cell], board: Board):
     spacing = get_spacing(board)
     
-    if len(board.trajectory) == 1:
-        point = board.trajectory[0]
+    if len(trajectory) == 1:
+        point = trajectory[0]
         return [fltk.cercle(point.x*spacing, point.y*spacing, PRADIUS,
                             remplissage="blue")]
     
-    points = zip(board.trajectory, board.trajectory[1:])
+    points = zip(trajectory, trajectory[1:])
     tags = []
     for a, b in points:
         color = get_color(a, b).hex()
