@@ -74,8 +74,10 @@ class Board:
             cell = self.trajectory.pop()
             return cell
 
-    def win(self):
-        return len(self.trajectory) and self.trajectory[-1] in self.end
+    def win(self, trajectory: list[Cell] = None):
+        if trajectory is None:
+            trajectory = self.trajectory
+        return len(trajectory) and trajectory[-1] in self.end
 
     def load_board(board: list[str]) -> 'Board':
         res = Board()

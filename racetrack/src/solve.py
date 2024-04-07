@@ -30,6 +30,7 @@ def breadth_search(board: Board):
         for coord in board.next_coords():
             yield board.trajectory + [coord]
             stack.append(board.trajectory + [coord])
+    
     return board.trajectory
 
 SOLVERS = {
@@ -39,19 +40,31 @@ SOLVERS = {
 
 def main(board: Board, solver: callable):
     gen = solver(board)
-    tags = []
+    trajectory, tags = [], []
     tev = None
-    ended = False
+    ended, pause, step = False, False, False
     while tev != "Quitte":
         ev = fltk.donne_ev()
         tev = fltk.type_ev(ev)
         
-        if not ended or board.win():
-            try:
-                trajectory = next(gen)
-            except StopIteration:
-                ended = True
-            
+        if tev == "Touche":
+            touche = fltk.touche(ev)
+            if touche == "space":
+                pause = not pause
+            elif touche == "Return":
+                step = True
+        
+        if not (ended or board.win(trajectory)):
+            if step or not pause:
+                try:
+                    trajectory = next(gen)
+                except StopIteration:
+                    ended = True
+
+        step = False
+        if board.win(trajectory):
+            ended = True
+        
         graphic.erase_tags(tags)
         tags = graphic.draw_trajectory(trajectory, board)
         
