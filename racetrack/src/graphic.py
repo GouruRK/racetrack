@@ -38,22 +38,13 @@ def draw_grid(board: list[str], block_size) -> None:
         fltk.ligne(x*block_size, 0, x*block_size,
                    height*block_size)
 
-def wait_next_event():
-    ev = None
-    tev = None
-    while not tev:
-        ev = fltk.donne_ev()
-        tev = fltk.type_ev(ev)
-        fltk.mise_a_jour()
-    return tev
-
 def get_spacing(board: Board) -> int:
     if board.image:
         return board.spacing
     else:
         return board.block_size
 
-def next_event() -> str:
+def wait_event() -> str:
     ev = None
     tev = None
     while True:

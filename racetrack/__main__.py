@@ -4,7 +4,7 @@ from src.commandline import parse_args, TEXT_MODE, IMAGE_MODE
 from src.parser import parse_map
 from src.main import play
 import src.graphic as graphic
-import src.solve as solve
+from src.solve import solve, SOLVERS
 from src.board import Board
 
 def initiate_board_mode(args: dict[str, Any], board: list[str]):
@@ -15,7 +15,7 @@ def initiate_board_mode(args: dict[str, Any], board: list[str]):
     rboard = Board.load_board(board, args["dim"])
     
     if args["solve"] is not None:
-        solve.main(rboard, solve.SOLVERS[args["solve"]])
+        solve(rboard, SOLVERS[args["solve"]], args["opti"])
     else:
         play(rboard)
 

@@ -5,9 +5,6 @@ from collections import deque
 
 
 def indepth_search(board: Board):
-    if board.win():
-        return board.trajectory
-    
     stack = deque([[coord] for coord in board.next_coords()])
     
     while stack and not board.win():
@@ -19,9 +16,6 @@ def indepth_search(board: Board):
     return board.trajectory
 
 def breadth_search(board: Board):
-    if board.win():
-        return board.trajectory
-    
     stack = deque([[coord] for coord in board.next_coords()])
     
     while stack and not board.win():
@@ -38,7 +32,9 @@ SOLVERS = {
     "breadth": breadth_search
 }
 
-def main(board: Board, solver: callable):
+def solve(board: Board, solver: callable, fast: bool):
+    if fast:
+        return fast_solve(board, solver)
     gen = solver(board)
     trajectory, tags = [], []
     tev = None
@@ -46,7 +42,6 @@ def main(board: Board, solver: callable):
     while tev != "Quitte":
         ev = fltk.donne_ev()
         tev = fltk.type_ev(ev)
-        
         if tev == "Touche":
             touche = fltk.touche(ev)
             if touche == "space":
@@ -64,8 +59,22 @@ def main(board: Board, solver: callable):
         step = False
         if board.win(trajectory):
             ended = True
-        
+            graphic.draw_trajectory(trajectory, board)
         graphic.erase_tags(tags)
         tags = graphic.draw_trajectory(trajectory, board)
         
         fltk.mise_a_jour()
+
+def fast_solve(board: Board, solver: callable):
+    gen = solver(board)
+    attempts = 0
+    trajectory = []
+    
+    while not board.win(trajectory):
+        trajectory = next(gen)
+        attempts += 1
+
+    graphic.draw_trajectory(trajectory, board)
+    event = None
+    while event != "Quitte":
+        event = graphic.wait_event()

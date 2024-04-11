@@ -13,7 +13,7 @@ def play(board: Board):
             tags.extend(graphic.draw_points(coords, board))
             waiting = True
         
-        event = graphic.wait_next_event()
+        event = graphic.wait_event()
             
         if event == "ClicGauche":
             cell = graphic.get_cell_from_click(coords, board)
