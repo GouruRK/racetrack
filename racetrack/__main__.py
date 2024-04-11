@@ -7,17 +7,17 @@ import src.graphic as graphic
 import src.solve as solve
 from src.board import Board
 
-import src.fltk as fltk
-
 def initiate_board_mode(args: dict[str, Any], board: list[str]):
-    graphic.create_window_board(board)
-    graphic.draw_board(board)
-    graphic.draw_grid(board)
+    graphic.create_window_board(board, args["dim"])
+    graphic.draw_board(board, args["dim"])
+    graphic.draw_grid(board, args["dim"])
+    
+    rboard = Board.load_board(board, args["dim"])
     
     if args["solve"] is not None:
-        solve.main(Board.load_board(board), solve.SOLVERS[args["solve"]])
+        solve.main(rboard, solve.SOLVERS[args["solve"]])
     else:
-        play(Board.load_board(board))
+        play(rboard)
 
 def initiate_image_mode(args: dict[str, Any]):
     board = Board.load_image(args["map"], args["spacing"])
@@ -33,7 +33,7 @@ def main():
         board = parse_map(args["map"])
         initiate_board_mode(args, board)
     else:
-        initiate_image_mode()
+        initiate_image_mode(args)
     
 
 if __name__ == '__main__':

@@ -33,7 +33,7 @@ neighbour = {Cell(-1, -1), Cell(0, -1), Cell(1, -1), Cell(1, 0),
 
 class Board:
     
-    def __init__(self, image: PhotoImage = None, spacing: int = 0) -> None:
+    def __init__(self, image: PhotoImage = None, spacing: int = 0, block_size: int = 0) -> None:
         self.trajectory = []
         self.start = set()
         self.end = set()
@@ -41,6 +41,7 @@ class Board:
         self.legal = set()
         self.image = image
         self.spacing = spacing
+        self.block_size = block_size
 
     def next_coords(self, trajectory: list[Cell] = None) -> set[Cell]:
         if trajectory is None:
@@ -79,8 +80,8 @@ class Board:
             trajectory = self.trajectory
         return len(trajectory) and trajectory[-1] in self.end
 
-    def load_board(board: list[str]) -> 'Board':
-        res = Board()
+    def load_board(board: list[str], block_size: int) -> 'Board':
+        res = Board(block_size=block_size)
         for y, line in enumerate(board):
             for x, char in enumerate(line):
                 if char == '>':
