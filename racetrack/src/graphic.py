@@ -38,6 +38,15 @@ def draw_grid(board: list[str], block_size) -> None:
         fltk.ligne(x*block_size, 0, x*block_size,
                    height*block_size)
 
+def draw_image_grid(width: int, height: int, spacing: int) -> None:
+    for y in range(height//spacing):
+        fltk.ligne(0, y*spacing, width*spacing,
+                   y*spacing)
+    
+    for x in range(width//spacing):
+        fltk.ligne(x*spacing, 0, x*spacing,
+                   height*spacing)
+
 def get_spacing(board: Board) -> int:
     if board.image:
         return board.spacing
@@ -102,3 +111,12 @@ def draw_trajectory(trajectory: list[Cell], board: Board):
 
 def create_window_board(board: list[str], block_size: int):
     fltk.cree_fenetre(*map_coordinates(len(board[0]) - 2, len(board) - 1, block_size))
+
+def create_window_image(image_path: str) -> fltk.PhotoImage:
+    fltk.cree_fenetre(500, 500, redimension=True)
+    
+    image = fltk.PhotoImage(file=image_path)
+    fltk.redimensionne_fenetre(image.width(), image.height())
+    
+    fltk.image(0, 0, image_path, ancrage='nw')
+    return image

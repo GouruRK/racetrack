@@ -20,10 +20,13 @@ def initiate_board_mode(args: dict[str, Any], board: list[str]):
         play(rboard)
 
 def initiate_image_mode(args: dict[str, Any]):
-    board = Board.load_image(args["map"], args["spacing"])
+    image = graphic.create_window_image(args["map"])
+    graphic.draw_image_grid(image.width(), image.height(), args["spacing"])
+    
+    board = Board.load_image(image, args["spacing"])
     
     if args["solve"] is not None:
-        solve.main(board, solve.SOLVERS[args["solve"]])
+        solve(board, SOLVERS[args["solve"]], args["opti"])
     else:
         play(board)
 
@@ -35,6 +38,5 @@ def main():
     else:
         initiate_image_mode(args)
     
-
 if __name__ == '__main__':
     main()

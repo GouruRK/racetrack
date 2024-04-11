@@ -3,6 +3,7 @@ import colorsys
 class Colors:
     
     def __init__(self, r: int, g: int, b: int) -> None:
+        self._rgb = (r, g, b)
         self.hsv = colorsys.rgb_to_hsv(r/255, g/255, b/255)
     
     def rgb(self) -> tuple[int, int, int]:
@@ -23,6 +24,11 @@ class Colors:
             res.append(Colors(r1, g1, b1))
         return res
 
+    def __eq__(self, other):
+        if isinstance(other, Colors):
+            return self._rgb == other._rgb
+        return self._rgb == other
+
     def __str__(self):
         return str(self.rgb())
     
@@ -37,4 +43,4 @@ class Color:
     WHITE    = Colors(255, 255, 255)
     BLACK    = Colors(0, 0, 0)
     GREY     = Colors(128, 128, 128)
-    DARKCYAN = Colors(0, 139, 139)
+    DARKCYAN = Colors(0, 128, 128)

@@ -26,7 +26,6 @@ from typing import (
 try:
     # noinspection PyUnresolvedReferences
     from PIL import Image, ImageTk
-
     PIL_AVAILABLE = True
 except ImportError as e:
     PIL_AVAILABLE = False

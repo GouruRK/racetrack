@@ -1,5 +1,5 @@
 from src.fltk import PhotoImage
-from colour import Color
+from src.color import Color
 
 
 class Cell:
@@ -94,13 +94,13 @@ class Board:
                     res.legal.add(Cell(x, y))
         return res
     
-    def load_image(path: str, spacing: int) -> 'Board':
-        image = PhotoImage(path)
+    def load_image(image: object, spacing: int) -> 'Board':
         res = Board(image, spacing)
         for y in range(image.height() // spacing):
             for x in range(image.width() // spacing):
                 color = image.get(x*spacing, y*spacing)
                 cell = Cell(x, y)
+                
                 if color == Color.WHITE:
                     res.legal.add(cell)
                 elif color == Color.DARKCYAN:
