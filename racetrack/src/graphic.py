@@ -119,4 +119,5 @@ def create_window_image(image_path: str) -> fltk.PhotoImage:
     fltk.redimensionne_fenetre(image.width(), image.height())
     
     fltk.image(0, 0, image_path, ancrage='nw')
+    fltk.mise_a_jour()
     return image

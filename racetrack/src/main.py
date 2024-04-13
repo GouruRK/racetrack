@@ -1,7 +1,9 @@
 import src.graphic as graphic
 from src.board import Board
+from src.settings import STRICT_RULE
+from src.tools import filter_positions
 
-def play(board: Board):
+def play(board: Board, rule: str):
     event = None
     waiting = False
     tags = []
@@ -9,7 +11,10 @@ def play(board: Board):
     
     while event != "Quitte" and not board.win():
         if not waiting:
-            coords = board.next_coords()
+            if rule == STRICT_RULE:
+                coords = filter_positions(board)
+            else:
+                coords = board.next_coords()
             tags.extend(graphic.draw_points(coords, board))
             waiting = True
         

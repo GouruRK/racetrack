@@ -13,6 +13,9 @@ class Cell:
             return Cell(self.x + other.x, self.y + other.y)
         raise NotImplementedError
 
+    def __iter__(self):
+        return iter((self.x, self.y))
+
     def neighbour(self):
         return {self + c for c in neighbour}
     
@@ -26,6 +29,10 @@ class Cell:
 
     def __repr__(self) -> str:
         return f"Cell(x: {self.x}, y: {self.y})"
+    
+    def copy(self) -> 'Cell':
+        return Cell(self.x, self.y)
+    
 
 neighbour = {Cell(-1, -1), Cell(0, -1), Cell(1, -1), Cell(1, 0),
              Cell(1, 1),   Cell(0, 1),  Cell(-1, 1), Cell(-1, 0),
@@ -58,14 +65,6 @@ class Board:
             vector = Cell(a.x - b.x, a.y - b.y)
             targets = (trajectory[-1] + vector).neighbour()
         return (targets & self.legal) - set(trajectory)
-
-    def filter_image_obstacles(self, start: Cell, dest: Cell) -> bool:
-        return True
-
-    def filter_obstacles(self, start: Cell, dest: Cell) -> bool:
-        if self.image:
-            return self.filter_image_obstacles(start, dest)
-        return True
 
     def append(self, cell: Cell):
         self.trajectory.append(cell)

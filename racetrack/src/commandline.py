@@ -1,14 +1,9 @@
 from typing import Any
 import argparse
 from src.solve import SOLVERS
+from src.settings import *
 
 from src.settings import DEFAULT_SPACING, DEFAULT_MAP_MODE, DEFAULT_RULE, BLOCK_SIZE
-
-TEXT_MODE = "text"
-IMAGE_MODE = "image"
-
-STRICT_RULE = "strict"
-LAX_RULE = "lax"
 
 def parse_args() -> dict[str, Any]:
     parser = argparse.ArgumentParser()

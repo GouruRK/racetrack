@@ -2,26 +2,37 @@ from src.board import Board
 import src.graphic as graphic
 import src.fltk as fltk
 from collections import deque
+from src.settings import LAX_RULE
+from src.tools import filter_positions
 
-
-def indepth_search(board: Board):
+def indepth_search(board: Board, rule: str):
     stack = deque([[coord] for coord in board.next_coords()])
     
     while stack and not board.win():
         board.trajectory = stack.pop()
         
-        for coord in board.next_coords():
+        if rule == LAX_RULE:
+            next_coords = board.next_coords()
+        else:
+            next_coords = filter_positions(board)
+            
+        for coord in next_coords:
             yield board.trajectory + [coord]
             stack.append(board.trajectory + [coord])
     return board.trajectory
 
-def breadth_search(board: Board):
+def breadth_search(board: Board, rule: str):
     stack = deque([[coord] for coord in board.next_coords()])
     
     while stack and not board.win():
         board.trajectory = stack.popleft()
         
-        for coord in board.next_coords():
+        if rule == LAX_RULE:
+            next_coords = board.next_coords()
+        else:
+            next_coords = filter_positions(board)
+        
+        for coord in next_coords:
             yield board.trajectory + [coord]
             stack.append(board.trajectory + [coord])
     
@@ -32,10 +43,10 @@ SOLVERS = {
     "breadth": breadth_search
 }
 
-def solve(board: Board, solver: callable, fast: bool):
+def solve(board: Board, solver: callable, fast: bool, rule: str):
     if fast:
-        return fast_solve(board, solver)
-    gen = solver(board)
+        return fast_solve(board, solver, rule)
+    gen = solver(board, rule)
     trajectory, tags = [], []
     tev = None
     ended, pause, step = False, False, False
@@ -65,8 +76,8 @@ def solve(board: Board, solver: callable, fast: bool):
         
         fltk.mise_a_jour()
 
-def fast_solve(board: Board, solver: callable):
-    gen = solver(board)
+def fast_solve(board: Board, solver: callable, rule: str):
+    gen = solver(board, rule)
     attempts = 0
     trajectory = []
     

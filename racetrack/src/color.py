@@ -1,4 +1,5 @@
 import colorsys
+from random import randint
 
 class Colors:
     
@@ -23,11 +24,17 @@ class Colors:
             b1 += bdelta
             res.append(Colors(r1, g1, b1))
         return res
+    
+    def random_color() -> 'Colors':
+        return Colors(randint(0, 255), randint(0, 255), randint(0, 255))
 
     def __eq__(self, other):
         if isinstance(other, Colors):
             return self._rgb == other._rgb
         return self._rgb == other
+
+    def __hash__(self):
+        return hash(self._rgb)
 
     def __str__(self):
         return str(self.rgb())
