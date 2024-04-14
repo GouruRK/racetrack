@@ -28,18 +28,18 @@ class Colors:
     def random_color() -> 'Colors':
         return Colors(randint(0, 255), randint(0, 255), randint(0, 255))
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if isinstance(other, Colors):
             return self._rgb == other._rgb
         return self._rgb == other
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self._rgb)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.rgb())
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self.rgb())
 
 class Color:

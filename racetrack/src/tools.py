@@ -1,9 +1,7 @@
 from src.board import Cell, Board
 from math import sqrt
-from src.color import Colors, Color
+from src.color import Color
 from src.settings import RRADIUS
-
-import src.fltk as fltk
 
 VALID_TEXTURES = {Color.WHITE, Color.DARKCYAN, Color.GREY}
 
@@ -79,8 +77,7 @@ def filter_textbased_postion(board: Board, positions: set[Cell]) -> set[Cell]:
             new_coords.add(coord)
     return new_coords
 
-
-def filter_positions(board: Board):
+def filter_positions(board: Board) -> set[Cell]:
     positions = board.next_coords()
         
     if not len(board.trajectory):

@@ -1,12 +1,13 @@
-from src.board import Board
+from src.board import Cell, Board
 import src.graphic as graphic
 import src.fltk as fltk
 from collections import deque
 from src.settings import LAX_RULE
 from src.tools import filter_positions
 from time import time
+from typing import Generator
 
-def indepth_search(board: Board, rule: str):
+def indepth_search(board: Board, rule: str) -> Generator[list[Cell]]:
     stack = deque([[coord] for coord in board.next_coords()])
     
     while stack and not board.win():
@@ -22,7 +23,7 @@ def indepth_search(board: Board, rule: str):
             stack.append(board.trajectory + [coord])
     return board.trajectory
 
-def breadth_search(board: Board, rule: str):
+def breadth_search(board: Board, rule: str) -> Generator[list[Cell]]:
     stack = deque([[coord] for coord in board.next_coords()])
     
     while stack and not board.win():
@@ -44,7 +45,7 @@ SOLVERS = {
     "breadth": breadth_search
 }
 
-def solve(board: Board, solver: callable, fast: bool, c_time: bool, rule: str):
+def solve(board: Board, solver: callable, fast: bool, c_time: bool, rule: str) -> None:
     if fast:
         return fast_solve(board, solver, c_time, rule)
     gen = solver(board, rule)
@@ -83,16 +84,14 @@ def solve(board: Board, solver: callable, fast: bool, c_time: bool, rule: str):
     
     graphic.wait_exit()
 
-def fast_solve(board: Board, solver: callable, c_time: bool, rule: str):
+def fast_solve(board: Board, solver: callable, c_time: bool, rule: str) -> None:
     gen = solver(board, rule)
-    attempts = 0
     trajectory = []
     
     start = time()
-    while not board.win(trajectory):
-        trajectory = next(gen)
-        attempts += 1
     
+    while not board.win(trajectory): trajectory = next(gen)
+        
     if c_time:    
         print(f"Solved in {time() - start:0.2}s")
 

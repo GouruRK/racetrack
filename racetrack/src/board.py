@@ -1,25 +1,25 @@
 from src.fltk import PhotoImage
 from src.color import Color
-
+from typing import Iterator
 
 class Cell:
     
-    def __init__(self, x, y):
+    def __init__(self, x, y) -> None:
         self.x = x
         self.y = y
 
-    def __add__(self, other):
+    def __add__(self, other) -> 'Cell':
         if isinstance(other, Cell):
             return Cell(self.x + other.x, self.y + other.y)
         raise NotImplementedError
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[tuple[int, int]]:
         return iter((self.x, self.y))
 
-    def neighbour(self):
+    def neighbour(self) -> set['Cell']:
         return {self + c for c in neighbour}
     
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if isinstance(other, Cell):
             return self.x == other.x and self.y == other.y
         return False
@@ -66,10 +66,10 @@ class Board:
             targets = (trajectory[-1] + vector).neighbour()
         return (targets & self.legal) - set(trajectory)
 
-    def append(self, cell: Cell):
+    def append(self, cell: Cell) -> None:
         self.trajectory.append(cell)
 
-    def pop(self):
+    def pop(self) -> Cell:
         if self.trajectory:
             cell = self.trajectory.pop()
             return cell

@@ -15,7 +15,7 @@ GRADIENTS = Color.BLUE.gradient(Color.RED, 30)
 def map_coordinates(x: int, y: int, block_size: int) -> tuple[int, int]:
     return x*block_size, y*block_size
 
-def draw_board(board: list[str], block_size) -> None:
+def draw_board(board: list[str], block_size: int) -> None:
     for y, line in enumerate(board):
         for x, char in enumerate(line):
             if char in COLORS:
@@ -26,7 +26,7 @@ def draw_board(board: list[str], block_size) -> None:
                             couleur=color,
                             remplissage=color)
 
-def draw_grid(board: list[str], block_size) -> None:
+def draw_grid(board: list[str], block_size: int) -> None:
     height = len(board)
     width = len(board[0])
     
@@ -55,8 +55,7 @@ def get_spacing(board: Board) -> int:
         return board.block_size
 
 def wait_event() -> str:
-    ev = None
-    tev = None
+    ev, tev = None, None
     while True:
         ev = fltk.donne_ev()
         tev = fltk.type_ev(ev)
@@ -85,7 +84,7 @@ def get_cell_from_click(points: set[Cell], board: Board) -> Cell:
         if distance(p, cell) < 5:
             return point
 
-def erase_tags(tags: list[int]):
+def erase_tags(tags: list[int]) -> None:
     for tag in tags:
         fltk.efface(tag)
 
@@ -95,7 +94,7 @@ def get_color(a: Cell, b: Cell) -> Color:
         return Color.RED
     return GRADIENTS[dist]
 
-def draw_trajectory(trajectory: list[Cell], board: Board):
+def draw_trajectory(trajectory: list[Cell], board: Board) -> list[int]:
     spacing = get_spacing(board)
     
     if len(trajectory) == 1:
@@ -114,7 +113,7 @@ def draw_trajectory(trajectory: list[Cell], board: Board):
         tags.append(fltk.ligne(ax, ay, bx, by, epaisseur=2, couleur=color))
     return tags
 
-def create_window_board(board: list[str], block_size: int):
+def create_window_board(board: list[str], block_size: int) -> None:
     fltk.cree_fenetre(*map_coordinates(len(board[0]) - 2, len(board) - 1, block_size))
 
 def create_window_image(image_path: str) -> fltk.PhotoImage:

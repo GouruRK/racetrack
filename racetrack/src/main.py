@@ -3,7 +3,7 @@ from src.board import Board
 from src.settings import STRICT_RULE
 from src.tools import filter_positions
 
-def play(board: Board, rule: str):
+def play(board: Board, rule: str) -> None:
     event = None
     waiting = False
     tags = []
