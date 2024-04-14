@@ -114,7 +114,7 @@ def draw_trajectory(trajectory: list[Cell], board: Board) -> list[int]:
     return tags
 
 def create_window_board(board: list[str], block_size: int) -> None:
-    fltk.cree_fenetre(*map_coordinates(len(board[0]) - 2, len(board) - 1, block_size))
+    fltk.cree_fenetre(*map_coordinates(len(board[0]) - 1, len(board) - 1, block_size))
 
 def create_window_image(image_path: str) -> fltk.PhotoImage:
     fltk.cree_fenetre(500, 500, redimension=True)

@@ -20,6 +20,13 @@ class Cell:
     def neighbour(self) -> set['Cell']:
         return {self + c for c in neighbour}
     
+    def __lt__(self, other) -> bool:
+        if isinstance(other, Cell):
+            return (self.x, self.y) < (other.x, other.y)
+        if isinstance(other, tuple):
+            return (self.x, self.y) < other
+        raise NotImplementedError
+        
     def __eq__(self, other) -> bool:
         if isinstance(other, Cell):
             return self.x == other.x and self.y == other.y
