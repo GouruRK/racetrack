@@ -38,6 +38,7 @@ def draw_grid(board: list[str], block_size) -> None:
         fltk.ligne(x*block_size, 0, x*block_size,
                    height*block_size)
 
+
 def draw_image_grid(width: int, height: int, spacing: int) -> None:
     for y in range(height//spacing):
         fltk.ligne(0, y*spacing, width*spacing,
@@ -64,6 +65,10 @@ def wait_event() -> str:
                 return fltk.touche(ev)
             return tev
         fltk.mise_a_jour()
+
+def wait_exit() -> None:
+    while wait_event() != "Quitte":
+        ...
 
 def draw_points(points: set[Cell], board: Board) -> list[int]:
     spacing = get_spacing(board)
@@ -119,5 +124,4 @@ def create_window_image(image_path: str) -> fltk.PhotoImage:
     fltk.redimensionne_fenetre(image.width(), image.height())
     
     fltk.image(0, 0, image_path, ancrage='nw')
-    fltk.mise_a_jour()
     return image

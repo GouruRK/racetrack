@@ -13,6 +13,8 @@ def parse_args() -> dict[str, Any]:
                         required=False)
     parser.add_argument("--opti", "-o", default=False, action="store_true",
                         required=False)
+    parser.add_argument("--time", "-t", default=False, action="store_true",
+                        required=False)
     parser.add_argument("--mode", "-m", type=str, default=DEFAULT_MAP_MODE,
                         required=False, choices={TEXT_MODE, IMAGE_MODE})
     parser.add_argument("--rule", "-r", type=str, default=DEFAULT_RULE,

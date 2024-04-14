@@ -32,6 +32,8 @@ def bresenham(start: Cell, end: Cell) -> list[Cell]:
     if start.y == end.y:
         end.y += 1
     
+    count = 0
+    
     while start.x != end.x and start.y != end.y:
         t_err = 2*err
         if t_err >= dy:
@@ -40,7 +42,10 @@ def bresenham(start: Cell, end: Cell) -> list[Cell]:
         if t_err <= dx:
             err += dx
             start.y += yslope
-        res.append(start.copy())
+        
+        count += 1
+        if count % 3 == 0:
+            res.append(start.copy())
     return res
 
 def filter_imagebased_position(board: Board, positions: set[Cell]) -> set[Cell]:

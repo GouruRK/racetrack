@@ -4,6 +4,7 @@ import src.fltk as fltk
 from collections import deque
 from src.settings import LAX_RULE
 from src.tools import filter_positions
+from time import time
 
 def indepth_search(board: Board, rule: str):
     stack = deque([[coord] for coord in board.next_coords()])
@@ -43,49 +44,57 @@ SOLVERS = {
     "breadth": breadth_search
 }
 
-def solve(board: Board, solver: callable, fast: bool, rule: str):
+def solve(board: Board, solver: callable, fast: bool, c_time: bool, rule: str):
     if fast:
-        return fast_solve(board, solver, rule)
+        return fast_solve(board, solver, c_time, rule)
     gen = solver(board, rule)
     trajectory, tags = [], []
     tev = None
-    ended, pause, step = False, False, False
-    while tev != "Quitte":
+    pause, step = False, False
+    start, sum_time = time(), 0
+    while tev != "Quitte" and not board.win(trajectory):
         ev = fltk.donne_ev()
         tev = fltk.type_ev(ev)
         if tev == "Touche":
             touche = fltk.touche(ev)
             if touche == "space":
                 pause = not pause
+                if pause:
+                    sum_time = time() - start
+                else:
+                    start = time()
             elif touche == "Return":
                 step = True
         
-        if not (ended or board.win(trajectory)):
-            if step or not pause:
-                try:
-                    trajectory = next(gen)
-                except StopIteration:
-                    ended = True
+        if step or not pause:
+            try:
+                trajectory = next(gen)
+            except StopIteration:
+                ...
 
         step = False
-        if board.win(trajectory):
-            ended = True
-            graphic.draw_trajectory(trajectory, board)
         graphic.erase_tags(tags)
         tags = graphic.draw_trajectory(trajectory, board)
-        
         fltk.mise_a_jour()
+    if tev == "Quitte":
+        return
+    if c_time:
+        print(f"Solved in {time() - start + sum_time:0.2}s")
+    
+    graphic.wait_exit()
 
-def fast_solve(board: Board, solver: callable, rule: str):
+def fast_solve(board: Board, solver: callable, c_time: bool, rule: str):
     gen = solver(board, rule)
     attempts = 0
     trajectory = []
     
+    start = time()
     while not board.win(trajectory):
         trajectory = next(gen)
         attempts += 1
+    
+    if c_time:    
+        print(f"Solved in {time() - start:0.2}s")
 
     graphic.draw_trajectory(trajectory, board)
-    event = None
-    while event != "Quitte":
-        event = graphic.wait_event()
+    graphic.wait_exit()
