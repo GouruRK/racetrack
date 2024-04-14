@@ -57,29 +57,18 @@ def filter_imagebased_position(board: Board, positions: set[Cell]) -> set[Cell]:
     return new_coords
 
 def filter_textbased_postion(board: Board, positions: set[Cell]) -> set[Cell]:
-    # https://mathworld.wolfram.com/Circle-LineIntersection.html
     new_coords = set()
     start = map_cell(board.trajectory[-1], board.block_size)
     for coord in positions:
+        t_coord = map_cell(coord, board.block_size)
         rejected = False
-        for obstacles in board.obstacles:
-            x1, y1 = start
-            x2, y2 = map_cell(coord, board.block_size)
-            cx, cy = map_cell(obstacles, board.block_size)
-            
-            x1 -= cx
-            y1 -= cy
-            x2 -= cx
-            y2 -= cy
-            
-            dr = sqrt((x1*y2)**2 - (x2*y1)**2)
-            D = x1*y2 - x2*y1
-            
-            discrim = (board.block_size*RRADIUS)**2 * dr**2 - D**2
-            if discrim > 0:
-                print("coord", coord, "blocked by", obstacles)
-                fltk.cercle(cx, cy, board.block_size*RRADIUS)
-                rejected = True
+        for in_between in bresenham(start.copy(), t_coord.copy()):
+            for obstacles in board.obstacles:
+                obstacles = map_cell(obstacles, board.block_size)
+                if distance(in_between, obstacles) <= board.block_size*RRADIUS:
+                    rejected = True
+                    break
+            if rejected:
                 break
         if not rejected:
             new_coords.add(coord)
