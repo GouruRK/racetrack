@@ -1,17 +1,23 @@
-from src.board import Cell, Board
-import src.graphic as graphic
-import src.fltk as fltk
 from collections import deque
-from src.settings import LAX_RULE
-from src.tools import filter_positions
 from time import time
 from typing import Generator
 
-def indepth_search(board: Board, rule: str) -> Generator[list[Cell]]:
+import src.fltk as fltk
+import src.graphic as graphic
+from src.board import Cell, Board
+from src.settings import LAX_RULE
+from src.tools import filter_positions
+
+def indepth_search(board: Board, rule: str) -> Generator[list[Cell], None, list[Cell]]:
     stack = deque([[coord] for coord in board.next_coords()])
-    
+    done = set()
     while stack and not board.win():
         board.trajectory = stack.pop()
+        
+        t_traj = tuple(board.trajectory)
+        if t_traj in done:
+            continue
+        done.add(t_traj)
         
         if rule == LAX_RULE:
             next_coords = board.next_coords()
@@ -19,15 +25,21 @@ def indepth_search(board: Board, rule: str) -> Generator[list[Cell]]:
             next_coords = filter_positions(board)
             
         for coord in next_coords:
-            yield board.trajectory + [coord]
-            stack.append(board.trajectory + [coord])
+            new_traj = board.trajectory + [coord]
+            if tuple(new_traj) not in done:
+                yield new_traj
+                stack.append(new_traj)
     return board.trajectory
 
-def breadth_search(board: Board, rule: str) -> Generator[list[Cell]]:
+def breadth_search(board: Board, rule: str) -> Generator[list[Cell], None, list[Cell]]:
     stack = deque([[coord] for coord in board.next_coords()])
-    
+    done = set()
     while stack and not board.win():
         board.trajectory = stack.popleft()
+        t_traj = tuple(board.trajectory)
+        if t_traj in done:
+            continue
+        done.add(t_traj)
         
         if rule == LAX_RULE:
             next_coords = board.next_coords()
@@ -35,8 +47,10 @@ def breadth_search(board: Board, rule: str) -> Generator[list[Cell]]:
             next_coords = filter_positions(board)
         
         for coord in next_coords:
-            yield board.trajectory + [coord]
-            stack.append(board.trajectory + [coord])
+            new_traj = board.trajectory + [coord]
+            if tuple(new_traj) not in done:
+                yield new_traj
+                stack.append(new_traj)
     
     return board.trajectory
 
@@ -45,9 +59,7 @@ SOLVERS = {
     "breadth": breadth_search
 }
 
-def solve(board: Board, solver: callable, fast: bool, c_time: bool, rule: str) -> None:
-    if fast:
-        return fast_solve(board, solver, c_time, rule)
+def solve(board: Board, solver: callable, c_time: bool, rule: str) -> None:
     gen = solver(board, rule)
     trajectory, tags = [], []
     tev = None

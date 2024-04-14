@@ -33,3 +33,7 @@ def play(board: Board, rule: str) -> None:
                 tags = graphic.draw_trajectory(board.trajectory, board)
                 waiting = False
     
+    if event == "Quitte":
+        return
+    graphic.wait_exit()
+    

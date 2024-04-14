@@ -1,6 +1,7 @@
-from src.board import Cell, Board
 from math import sqrt
+
 from src.color import Color
+from src.board import Cell, Board
 from src.settings import RRADIUS
 
 VALID_TEXTURES = {Color.WHITE, Color.DARKCYAN, Color.GREY}

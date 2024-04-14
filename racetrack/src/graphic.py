@@ -1,8 +1,8 @@
 import src.fltk as fltk
 from src.board import Cell, Board
-from src.tools import distance
 from src.color import Color
 from src.settings import RRADIUS, PRADIUS
+from src.tools import distance
 
 COLORS = {
     '#': "green",
