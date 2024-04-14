@@ -112,7 +112,7 @@ def solve(board: Board, solver: callable, c_time: bool, rule: str) -> None:
     trajectory, tags = [], []
     tev = None
     pause, step = False, False
-    start, sum_time = time(), 0
+    start, sum_time, attempt = time(), 0, 0
     while tev != "Quitte" and not board.win(trajectory):
         ev = fltk.donne_ev()
         tev = fltk.type_ev(ev)
@@ -130,6 +130,7 @@ def solve(board: Board, solver: callable, c_time: bool, rule: str) -> None:
         if step or not pause:
             try:
                 trajectory = next(gen)
+                attempt += 1
             except StopIteration:
                 ...
 
@@ -140,7 +141,7 @@ def solve(board: Board, solver: callable, c_time: bool, rule: str) -> None:
     if tev == "Quitte":
         return
     if c_time:
-        print(f"Solved in {time() - start + sum_time:0.2}s")
+        print(f"Solved in {time() - start + sum_time:0.2}s in {attempt} attempts")
     
     graphic.wait_exit()
 
@@ -149,11 +150,14 @@ def fast_solve(board: Board, solver: callable, c_time: bool, rule: str) -> None:
     trajectory = []
     
     start = time()
+    attempt = 0
     
-    while not board.win(trajectory): trajectory = next(gen)
+    while not board.win(trajectory):
+        trajectory = next(gen)
+        attempt += 1
         
     if c_time:    
-        print(f"Solved in {time() - start:0.2}s")
+        print(f"Solved in {time() - start:0.2}s in {attempt} attempts")
 
     graphic.draw_trajectory(trajectory, board)
     graphic.wait_exit()
