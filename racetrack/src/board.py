@@ -11,10 +11,11 @@ from lib.fltk import PhotoImage
 
 __all__ = ["Cell", "Board"]
 
+
 class Cell:
     """
     Represent a coordinates on a two-dimension system
-    
+
     Attributes
     ----------
     x : int
@@ -83,7 +84,7 @@ class Cell:
         return Cell(self.x, self.y)
 
 
-neighbour = {       # set of arrounds coordinates of (0, 0)
+neighbour = {  # set of arrounds coordinates of (0, 0)
     Cell(-1, -1),
     Cell(0, -1),
     Cell(1, -1),
@@ -98,7 +99,7 @@ neighbour = {       # set of arrounds coordinates of (0, 0)
 
 class Board:
     """Represent the internal data of a map
-    
+
     Attributes
     ----------
     trajectory : list[Cell]

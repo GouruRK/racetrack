@@ -4,9 +4,17 @@ from src.color import Color
 from src.settings import RRADIUS, PRADIUS
 from src.tools import distance
 
-__all__ = ["draw_board", "draw_grid", "draw_grid", "draw_image_grid",
-           "wait_event", "wait_exit", "draw_trajectory", "create_window_board",
-           "create_window_image"]
+__all__ = [
+    "draw_board",
+    "draw_grid",
+    "draw_grid",
+    "draw_image_grid",
+    "wait_event",
+    "wait_exit",
+    "draw_trajectory",
+    "create_window_board",
+    "create_window_image",
+]
 
 COLORS = {"#": "green", ">": "darkcyan", "*": "grey"}
 

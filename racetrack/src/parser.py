@@ -6,6 +6,7 @@ from src.solve import SOLVERS
 
 __all__ = ["parse_args", "parse_map"]
 
+
 def parse_args() -> dict[str, Any]:
     parser = argparse.ArgumentParser()
     parser.add_argument(

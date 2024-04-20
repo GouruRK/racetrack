@@ -1,6 +1,15 @@
-__all__ = ["DEFAULT_SPACING", "TEXT_MODE", "IMAGE_MODE", "STRICT_RULE",
-           "LAX_RULE", "DEFAULT_MAP_MODE", "DEFAULT_RULE", "BLOCK_SIZE",
-           "RRADIUS", "PRADIUS"]
+__all__ = [
+    "DEFAULT_SPACING",
+    "TEXT_MODE",
+    "IMAGE_MODE",
+    "STRICT_RULE",
+    "LAX_RULE",
+    "DEFAULT_MAP_MODE",
+    "DEFAULT_RULE",
+    "BLOCK_SIZE",
+    "RRADIUS",
+    "PRADIUS",
+]
 
 DEFAULT_SPACING = 25
 
