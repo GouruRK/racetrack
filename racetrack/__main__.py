@@ -1,12 +1,13 @@
 from typing import Any
 
-import src.graphic as graphic
-import src.fltk as fltk
+from src import graphic
+from src import fltk
 from src.board import Board
 from src.main import play
 from src.parser import parse_args, parse_map
-from src.settings import *
+from src.settings import TEXT_MODE
 from src.solve import solve, fast_solve, SOLVERS
+
 
 def initiate_board_mode(args: dict[str, Any], board: list[str]):
     graphic.create_window_board(board, args["dim"])
@@ -15,11 +16,13 @@ def initiate_board_mode(args: dict[str, Any], board: list[str]):
     fltk.mise_a_jour()
     return Board.load_board(board, args["dim"])
 
+
 def initiate_image_mode(args: dict[str, Any]):
     image = graphic.create_window_image(args["map"])
     graphic.draw_image_grid(image.width(), image.height(), args["spacing"])
     fltk.mise_a_jour()
     return Board.load_image(image, args["spacing"])
+
 
 def main():
     args = parse_args()
@@ -28,7 +31,7 @@ def main():
         board = initiate_board_mode(args, board)
     else:
         board = initiate_image_mode(args)
-        
+
     if args["solve"] is not None:
         if args["opti"]:
             fast_solve(board, SOLVERS[args["solve"]], args["time"], args["rule"])
@@ -36,6 +39,7 @@ def main():
             solve(board, SOLVERS[args["solve"]], args["time"], args["rule"])
     else:
         play(board, args["rule"])
-        
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     main()

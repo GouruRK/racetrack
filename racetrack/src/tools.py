@@ -6,17 +6,16 @@ from src.settings import RRADIUS
 
 VALID_TEXTURES = {Color.WHITE, Color.DARKCYAN, Color.GREY}
 
-def parse_map(filepath: str) -> list[str]:
-    with open(filepath, "r") as file:
-        return [line for line in file]
-    
+
 def distance(a: Cell, b: Cell) -> float:
     x = a.x - b.x
     y = a.y - b.y
-    return sqrt(x*x + y*y)
+    return sqrt(x * x + y * y)
+
 
 def map_cell(cell: Cell, ratio: int) -> Cell:
-    return Cell(cell.x*ratio, cell.y*ratio)
+    return Cell(cell.x * ratio, cell.y * ratio)
+
 
 def bresenham(start: Cell, end: Cell) -> list[Cell]:
     # https://gist.github.com/bert/1085538
@@ -25,27 +24,28 @@ def bresenham(start: Cell, end: Cell) -> list[Cell]:
     yslope = 1 if start.y < end.y else -1
     err = dx + dy
     res = [start.copy()]
-    
+
     if start.x == end.x:
         end.x += 1
     if start.y == end.y:
         end.y += 1
-    
+
     count = 0
-    
+
     while start.x != end.x and start.y != end.y:
-        t_err = 2*err
+        t_err = 2 * err
         if t_err >= dy:
             err += dy
             start.x += xslope
         if t_err <= dx:
             err += dx
             start.y += yslope
-        
+
         count += 1
         if count % 3 == 0:
             res.append(start.copy())
     return res
+
 
 def filter_imagebased_position(board: Board, positions: set[Cell]) -> set[Cell]:
     new_coords = set()
@@ -60,6 +60,7 @@ def filter_imagebased_position(board: Board, positions: set[Cell]) -> set[Cell]:
             new_coords.add(coord)
     return new_coords
 
+
 def filter_textbased_postion(board: Board, positions: set[Cell]) -> set[Cell]:
     new_coords = set()
     start = map_cell(board.trajectory[-1], board.block_size)
@@ -69,7 +70,7 @@ def filter_textbased_postion(board: Board, positions: set[Cell]) -> set[Cell]:
         for in_between in bresenham(start.copy(), t_coord.copy()):
             for obstacles in board.obstacles:
                 obstacles = map_cell(obstacles, board.block_size)
-                if distance(in_between, obstacles) <= board.block_size*RRADIUS:
+                if distance(in_between, obstacles) <= board.block_size * RRADIUS:
                     rejected = True
                     break
             if rejected:
@@ -78,12 +79,13 @@ def filter_textbased_postion(board: Board, positions: set[Cell]) -> set[Cell]:
             new_coords.add(coord)
     return new_coords
 
+
 def filter_positions(board: Board) -> set[Cell]:
     positions = board.next_coords()
-        
-    if not len(board.trajectory):
+
+    if not board.trajectory:
         return positions
-    
+
     if board.image is not None:
         return filter_imagebased_position(board, positions)
     return filter_textbased_postion(board, positions)

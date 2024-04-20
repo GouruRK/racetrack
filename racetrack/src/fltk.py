@@ -26,6 +26,7 @@ from typing import (
 try:
     # noinspection PyUnresolvedReferences
     from PIL import Image, ImageTk
+
     PIL_AVAILABLE = True
 except ImportError as e:
     PIL_AVAILABLE = False
@@ -100,12 +101,12 @@ class CustomCanvas:
     _default_ev = ["ClicGauche", "ClicDroit", "Touche"]
 
     def __init__(
-            self,
-            width: int,
-            height: int,
-            refresh_rate: int = 100,
-            events: Optional[List[str]] = None,
-            resizing: bool = False,
+        self,
+        width: int,
+        height: int,
+        refresh_rate: int = 100,
+        events: Optional[List[str]] = None,
+        resizing: bool = False,
     ) -> None:
         # width and height of the canvas
         self.width = width
@@ -234,8 +235,7 @@ def _fenetre_creee(func: Callable[..., Ret]) -> Callable[..., Ret]:
 
 
 def cree_fenetre(
-        largeur: int, hauteur: int, frequence: int = 100,
-        redimension: bool = False
+    largeur: int, hauteur: int, frequence: int = 100, redimension: bool = False
 ) -> None:
     """
     Crée une fenêtre de dimensions ``largeur`` x ``hauteur`` pixels.
@@ -292,13 +292,13 @@ def mise_a_jour() -> None:
 
 @_fenetre_creee
 def ligne(
-        ax: float,
-        ay: float,
-        bx: float,
-        by: float,
-        couleur: str = "black",
-        epaisseur: float = 1,
-        tag: str = "",
+    ax: float,
+    ay: float,
+    bx: float,
+    by: float,
+    couleur: str = "black",
+    epaisseur: float = 1,
+    tag: str = "",
 ) -> int:
     """
     Trace un segment reliant le point ``(ax, ay)`` au point ``(bx, by)``.
@@ -320,13 +320,13 @@ def ligne(
 
 @_fenetre_creee
 def fleche(
-        ax: float,
-        ay: float,
-        bx: float,
-        by: float,
-        couleur: str = "black",
-        epaisseur: float = 1,
-        tag: str = "",
+    ax: float,
+    ay: float,
+    bx: float,
+    by: float,
+    couleur: str = "black",
+    epaisseur: float = 1,
+    tag: str = "",
 ) -> int:
     """
     Trace une flèche du point ``(ax, ay)`` au point ``(bx, by)``.
@@ -341,7 +341,7 @@ def fleche(
     :return: identificateur d'objet
     """
     x, y = (bx - ax, by - ay)
-    n = (x ** 2 + y ** 2) ** 0.5
+    n = (x**2 + y**2) ** 0.5
     x, y = x / n, y / n
     points = [
         bx,
@@ -359,11 +359,11 @@ def fleche(
 
 @_fenetre_creee
 def polygone(
-        points: List[float],
-        couleur: str = "black",
-        remplissage: str = "",
-        epaisseur: float = 1,
-        tag: str = "",
+    points: List[float],
+    couleur: str = "black",
+    remplissage: str = "",
+    epaisseur: float = 1,
+    tag: str = "",
 ) -> int:
     """
     Trace un polygone dont la liste de points est fournie.
@@ -385,14 +385,14 @@ def polygone(
 
 @_fenetre_creee
 def rectangle(
-        ax: float,
-        ay: float,
-        bx: float,
-        by: float,
-        couleur: str = "black",
-        remplissage: str = "",
-        epaisseur: float = 1,
-        tag: str = "",
+    ax: float,
+    ay: float,
+    bx: float,
+    by: float,
+    couleur: str = "black",
+    remplissage: str = "",
+    epaisseur: float = 1,
+    tag: str = "",
 ) -> int:
     """
     Trace un rectangle noir ayant les point ``(ax, ay)`` et ``(bx, by)``
@@ -410,20 +410,19 @@ def rectangle(
     """
     assert __canevas is not None
     return __canevas.canvas.create_rectangle(
-        ax, ay, bx, by,
-        outline=couleur, fill=remplissage, width=epaisseur, tags=tag
+        ax, ay, bx, by, outline=couleur, fill=remplissage, width=epaisseur, tags=tag
     )
 
 
 @_fenetre_creee
 def cercle(
-        x: float,
-        y: float,
-        r: float,
-        couleur: str = "black",
-        remplissage: str = "",
-        epaisseur: float = 1,
-        tag: str = "",
+    x: float,
+    y: float,
+    r: float,
+    couleur: str = "black",
+    remplissage: str = "",
+    epaisseur: float = 1,
+    tag: str = "",
 ) -> int:
     """
     Trace un cercle de centre ``(x, y)`` et de rayon ``r`` en noir.
@@ -452,15 +451,15 @@ def cercle(
 
 @_fenetre_creee
 def arc(
-        x: float,
-        y: float,
-        r: float,
-        ouverture: float = 90,
-        depart: float = 0,
-        couleur: str = "black",
-        remplissage: str = "",
-        epaisseur: float = 1,
-        tag: str = "",
+    x: float,
+    y: float,
+    r: float,
+    ouverture: float = 90,
+    depart: float = 0,
+    couleur: str = "black",
+    remplissage: str = "",
+    epaisseur: float = 1,
+    tag: str = "",
 ) -> int:
     """
     Trace un arc de cercle de centre ``(x, y)``, de rayon ``r`` et
@@ -497,9 +496,7 @@ def arc(
 
 @_fenetre_creee
 def point(
-        x: float, y: float,
-        couleur: str = "black", epaisseur: float = 1,
-        tag: str = ""
+    x: float, y: float, couleur: str = "black", epaisseur: float = 1, tag: str = ""
 ) -> int:
     """
     Trace un point aux coordonnées ``(x, y)`` en noir.
@@ -512,8 +509,7 @@ def point(
     :return: identificateur d'objet
     """
     assert __canevas is not None
-    return cercle(x, y, epaisseur,
-                  couleur=couleur, remplissage=couleur, tag=tag)
+    return cercle(x, y, epaisseur, couleur=couleur, remplissage=couleur, tag=tag)
 
 
 # Image
@@ -521,13 +517,13 @@ def point(
 
 @_fenetre_creee
 def image(
-        x: float,
-        y: float,
-        fichier: str,
-        largeur: Optional[int] = None,
-        hauteur: Optional[int] = None,
-        ancrage: Anchor = "center",
-        tag: str = "",
+    x: float,
+    y: float,
+    fichier: str,
+    largeur: Optional[int] = None,
+    hauteur: Optional[int] = None,
+    ancrage: Anchor = "center",
+    tag: str = "",
 ) -> int:
     """
     Affiche l'image contenue dans ``fichier`` avec ``(x, y)`` comme centre. Les
@@ -556,9 +552,9 @@ def image(
     return img_object
 
 
-def _load_tk_image(fichier: str,
-                   hauteur: Optional[int] = None,
-                   largeur: Optional[int] = None) -> PhotoImage:
+def _load_tk_image(
+    fichier: str, hauteur: Optional[int] = None, largeur: Optional[int] = None
+) -> PhotoImage:
     chemin = Path(fichier)
     ph_image = PhotoImage(file=fichier)
     largeur_o = ph_image.width()
@@ -581,9 +577,9 @@ def _load_tk_image(fichier: str,
     return ph_image
 
 
-def _load_pil_image(fichier: str,
-                    hauteur: Optional[int] = None,
-                    largeur: Optional[int] = None) -> PhotoImage:
+def _load_pil_image(
+    fichier: str, hauteur: Optional[int] = None, largeur: Optional[int] = None
+) -> PhotoImage:
     chemin = Path(fichier)
     img = Image.open(fichier)
     if largeur is None:
@@ -603,14 +599,14 @@ def _load_pil_image(fichier: str,
 
 @_fenetre_creee
 def texte(
-        x: float,
-        y: float,
-        chaine: str,
-        couleur: str = "black",
-        ancrage: Anchor = "nw",
-        police: str = "Helvetica",
-        taille: int = 24,
-        tag: str = "",
+    x: float,
+    y: float,
+    chaine: str,
+    couleur: str = "black",
+    ancrage: Anchor = "nw",
+    police: str = "Helvetica",
+    taille: int = 24,
+    tag: str = "",
 ) -> int:
     """
     Affiche la chaîne ``chaine`` avec ``(x, y)`` comme point d'ancrage (par
@@ -628,14 +624,12 @@ def texte(
     """
     assert __canevas is not None
     return __canevas.canvas.create_text(
-        x, y,
-        text=chaine, font=(police, taille),
-        tags=tag, fill=couleur, anchor=ancrage
+        x, y, text=chaine, font=(police, taille), tags=tag, fill=couleur, anchor=ancrage
     )
 
 
 def taille_texte(
-        chaine: str, police: str = "Helvetica", taille: int = 24
+    chaine: str, police: str = "Helvetica", taille: int = 24
 ) -> Tuple[int, int]:
     """
     Donne la largeur et la hauteur en pixel nécessaires pour afficher
@@ -821,8 +815,7 @@ def attribut(ev: Optional[FltkEvent], nom: str) -> Any:
     tev, evtk = ev
     if not hasattr(evtk, nom):
         raise TypeEvenementNonValide(
-            f"Accès à l'attribut {nom} impossible "
-            f"sur un événement de type {tev}"
+            f"Accès à l'attribut {nom} impossible " f"sur un événement de type {tev}"
         )
     attr = getattr(evtk, nom)
     return attr if attr != "??" else None
