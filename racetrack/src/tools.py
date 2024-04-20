@@ -4,6 +4,8 @@ from src.color import Color
 from src.board import Cell, Board
 from src.settings import RRADIUS
 
+__all__ = ["distance", "map_cell", "filter_positions"]
+
 VALID_TEXTURES = {Color.WHITE, Color.DARKCYAN, Color.GREY}
 
 

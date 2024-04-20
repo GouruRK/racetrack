@@ -9,6 +9,8 @@ from src.board import Cell, Board
 from src.settings import LAX_RULE
 from src.tools import filter_positions, distance
 
+__all__ = ["SOLVERS", "solve", "fast_solve"]
+
 SearchType = Generator[list[Cell], None, list[Cell]]
 
 

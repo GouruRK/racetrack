@@ -1,6 +1,7 @@
 import colorsys
 from random import randint
 
+___all__ = ["Colors"]
 
 class Colors:
 

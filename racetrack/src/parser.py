@@ -4,6 +4,7 @@ from typing import Any
 from src import settings
 from src.solve import SOLVERS
 
+__all__ = ["parse_args", "parse_map"]
 
 def parse_args() -> dict[str, Any]:
     parser = argparse.ArgumentParser()
