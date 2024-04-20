@@ -1,7 +1,8 @@
 from typing import Any
 
+from lib import fltk
+
 from src import graphic
-from src import fltk
 from src.board import Board
 from src.main import play
 from src.parser import parse_args, parse_map

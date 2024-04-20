@@ -1,7 +1,7 @@
 from typing import Iterator
 
 from src.color import Color
-from src.fltk import PhotoImage
+from lib.fltk import PhotoImage
 
 
 class Cell:

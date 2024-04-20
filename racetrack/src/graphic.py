@@ -1,4 +1,4 @@
-from src import fltk
+from lib import fltk
 from src.board import Cell, Board
 from src.color import Color
 from src.settings import RRADIUS, PRADIUS

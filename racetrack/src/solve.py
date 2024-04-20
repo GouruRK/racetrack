@@ -3,7 +3,7 @@ from time import time
 from typing import Generator
 from heapq import heappush, heappop
 
-from src import fltk
+from lib import fltk
 from src import graphic
 from src.board import Cell, Board
 from src.settings import LAX_RULE
