@@ -19,7 +19,7 @@ def map_cell(cell: Cell, ratio: int) -> Cell:
     return Cell(cell.x * ratio, cell.y * ratio)
 
 
-def bresenham(start: Cell, end: Cell) -> list[Cell]:
+def bresenham(start: Cell, end: Cell, block_size: int) -> list[Cell]:
     # https://gist.github.com/bert/1085538
     dx, dy = abs(end.x - start.x), -abs(end.y - start.y)
     xslope = 1 if start.x < end.x else -1
@@ -44,7 +44,7 @@ def bresenham(start: Cell, end: Cell) -> list[Cell]:
             start.y += yslope
 
         count += 1
-        if count % 3 == 0:
+        if count % (block_size // 3) == 0:
             res.append(start.copy())
     return res
 
@@ -54,7 +54,7 @@ def filter_imagebased_position(board: Board, positions: set[Cell]) -> set[Cell]:
     start = map_cell(board.trajectory[-1], board.spacing)
     for coord in positions:
         rejected = False
-        for in_between in bresenham(start.copy(), map_cell(coord, board.spacing)):
+        for in_between in bresenham(start.copy(), map_cell(coord, board.spacing), board.spacing):
             if board.image.get(*in_between) not in VALID_TEXTURES:
                 rejected = True
                 break
@@ -69,7 +69,7 @@ def filter_textbased_postion(board: Board, positions: set[Cell]) -> set[Cell]:
     for coord in positions:
         t_coord = map_cell(coord, board.block_size)
         rejected = False
-        for in_between in bresenham(start.copy(), t_coord.copy()):
+        for in_between in bresenham(start.copy(), t_coord.copy(), board.block_size):
             for obstacles in board.obstacles:
                 obstacles = map_cell(obstacles, board.block_size)
                 if distance(in_between, obstacles) <= board.block_size * RRADIUS:

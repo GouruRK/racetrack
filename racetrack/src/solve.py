@@ -22,38 +22,28 @@ def next_coords(board: Board, rule: str) -> set[Cell]:
 
 def indepth_search(board: Board, rule: str) -> SearchType:
     stack = deque([[coord] for coord in board.next_coords()])
-    done = set()
     while stack and not board.win():
         board.trajectory = stack.pop()
 
-        t_traj = tuple(board.trajectory)
-        if t_traj in done:
-            continue
-        done.add(t_traj)
         yield board.trajectory
 
         for coord in next_coords(board, rule):
             new_traj = board.trajectory + [coord]
-            if tuple(new_traj) not in done:
-                stack.append(new_traj)
+            stack.append(new_traj)
     return board.trajectory
 
 
 def breadth_search(board: Board, rule: str) -> SearchType:
     stack = deque([[coord] for coord in board.next_coords()])
-    done = set()
+
     while stack and not board.win():
         board.trajectory = stack.popleft()
-        t_traj = tuple(board.trajectory)
-        if t_traj in done:
-            continue
-        done.add(t_traj)
+        
         yield board.trajectory
 
         for coord in next_coords(board, rule):
             new_traj = board.trajectory + [coord]
-            if tuple(new_traj) not in done:
-                stack.append(new_traj)
+            stack.append(new_traj)
     return board.trajectory
 
 
@@ -66,7 +56,6 @@ def average_zone(coords: set[Cell]) -> Cell:
 
 
 def astar(board: Board, rule: str) -> SearchType:
-    done = set()
     heap = []
     average_finish_zone = average_zone(board.end)
 
@@ -75,37 +64,27 @@ def astar(board: Board, rule: str) -> SearchType:
 
     while heap and not board.win():
         _, board.trajectory = heappop(heap)
-        t_traj = tuple(board.trajectory)
 
-        if t_traj in done:
-            continue
-        done.add(t_traj)
         yield board.trajectory
 
         for coord in next_coords(board, rule):
             new_traj = board.trajectory + [coord]
-            if tuple(new_traj) not in done:
-                heappush(heap, (distance(coord, average_finish_zone), new_traj))
+            heappush(heap, (distance(coord, average_finish_zone), new_traj))
     return board.trajectory
 
 
 def greedy(board: Board, rule: str) -> SearchType:
-    done = set()
     heap = [(0, [start]) for start in board.start]
 
     while heap and not board.win():
         _, board.trajectory = heappop(heap)
         t_traj = tuple(board.trajectory)
 
-        if t_traj in done:
-            continue
-        done.add(t_traj)
         yield board.trajectory
 
         for coord in next_coords(board, rule):
             new_traj = board.trajectory + [coord]
-            if tuple(new_traj) not in done:
-                heappush(heap, (-distance(board.trajectory[-1], coord), new_traj))
+            heappush(heap, (-distance(board.trajectory[-1], coord), new_traj))
     return board.trajectory
 
 
