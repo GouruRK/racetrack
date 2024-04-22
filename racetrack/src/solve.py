@@ -38,7 +38,7 @@ def breadth_search(board: Board, rule: str) -> SearchType:
 
     while stack and not board.win():
         board.trajectory = stack.popleft()
-        
+
         yield board.trajectory
 
         for coord in next_coords(board, rule):

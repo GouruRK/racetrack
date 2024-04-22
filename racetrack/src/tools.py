@@ -51,10 +51,12 @@ def bresenham(start: Cell, end: Cell, block_size: int) -> list[Cell]:
 
 def filter_imagebased_position(board: Board, positions: set[Cell]) -> set[Cell]:
     new_coords = set()
-    start = map_cell(board.trajectory[-1], board.spacing)
+    start = map_cell(board.trajectory[-1], board.padding)
     for coord in positions:
         rejected = False
-        for in_between in bresenham(start.copy(), map_cell(coord, board.spacing), board.spacing):
+        for in_between in bresenham(
+            start.copy(), map_cell(coord, board.padding), board.padding
+        ):
             if board.image.get(*in_between) not in VALID_TEXTURES:
                 rejected = True
                 break
@@ -65,14 +67,14 @@ def filter_imagebased_position(board: Board, positions: set[Cell]) -> set[Cell]:
 
 def filter_textbased_postion(board: Board, positions: set[Cell]) -> set[Cell]:
     new_coords = set()
-    start = map_cell(board.trajectory[-1], board.block_size)
+    start = map_cell(board.trajectory[-1], board.padding)
     for coord in positions:
-        t_coord = map_cell(coord, board.block_size)
+        t_coord = map_cell(coord, board.padding)
         rejected = False
-        for in_between in bresenham(start.copy(), t_coord.copy(), board.block_size):
+        for in_between in bresenham(start.copy(), t_coord.copy(), board.padding):
             for obstacles in board.obstacles:
-                obstacles = map_cell(obstacles, board.block_size)
-                if distance(in_between, obstacles) <= board.block_size * RRADIUS:
+                obstacles = map_cell(obstacles, board.padding)
+                if distance(in_between, obstacles) <= board.padding * RRADIUS:
                     rejected = True
                     break
             if rejected:

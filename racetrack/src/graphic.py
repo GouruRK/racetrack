@@ -1,3 +1,7 @@
+"""Contains functions to handle graphic representation of board, including
+display of trajectories and event management.
+"""
+
 from lib import fltk
 from src.board import Cell, Board
 from src.color import Color
@@ -7,8 +11,6 @@ from src.tools import distance
 __all__ = [
     "draw_board",
     "draw_grid",
-    "draw_grid",
-    "draw_image_grid",
     "wait_event",
     "wait_exit",
     "draw_trajectory",
@@ -21,11 +23,16 @@ COLORS = {"#": "green", ">": "darkcyan", "*": "grey"}
 GRADIENTS = Color.BLUE.gradient(Color.RED, 30)
 
 
-def map_coordinates(x: int, y: int, block_size: int) -> tuple[int, int]:
-    return x * block_size, y * block_size
-
-
 def draw_board(board: list[str], block_size: int) -> None:
+    """Draw text-based board
+
+    Parameters
+    ----------
+    board : list[str]
+        board to draw. Contains list of strings that code the type of tiles
+    block_size : int
+        padding between each block
+    """
     for y, line in enumerate(board):
         for x, char in enumerate(line):
             if char in COLORS:
@@ -39,18 +46,18 @@ def draw_board(board: list[str], block_size: int) -> None:
                 )
 
 
-def draw_grid(board: list[str], block_size: int) -> None:
-    height = len(board)
-    width = len(board[0])
+def draw_grid(width: int, height: int, spacing: int) -> None:
+    """Draw grid
 
-    for y in range(height):
-        fltk.ligne(0, y * block_size, width * block_size, y * block_size)
-
-    for x in range(width):
-        fltk.ligne(x * block_size, 0, x * block_size, height * block_size)
-
-
-def draw_image_grid(width: int, height: int, spacing: int) -> None:
+    Parameters
+    ----------
+    width : int
+        with of the map to draw the grid
+    height : int
+        height of the map to draw the grid
+    spacing : int
+        padding between each dot
+    """
     for y in range(height // spacing):
         fltk.ligne(0, y * spacing, width * spacing, y * spacing)
 
@@ -58,13 +65,15 @@ def draw_image_grid(width: int, height: int, spacing: int) -> None:
         fltk.ligne(x * spacing, 0, x * spacing, height * spacing)
 
 
-def get_spacing(board: Board) -> int:
-    if board.image:
-        return board.spacing
-    return board.block_size
-
-
 def wait_event() -> str:
+    """Wait until a fltk's event is triggered. If the evnet is a pressed key,
+    `wait_event` returns the pressed key
+
+    Returns
+    -------
+    str
+        event label
+    """
     ev, tev = None, None
     while True:
         ev = fltk.donne_ev()
@@ -77,25 +86,54 @@ def wait_event() -> str:
 
 
 def wait_exit() -> None:
+    """Wait until the user quit the window"""
     while wait_event() != "Quitte":
         ...
 
 
 def draw_points(points: set[Cell], board: Board) -> list[int]:
-    spacing = get_spacing(board)
+    """Draw given points. Points will be multiplied by board.padding
+    to scale them at the correct proportions
+
+    Parameters
+    ----------
+    points : set[Cell]
+        points to draw
+    board : Board
+
+    Returns
+    -------
+    list[int]
+        list of tags used to plot points
+    """
     return [
-        fltk.cercle(cell.x * spacing, cell.y * spacing, PRADIUS, remplissage="white")
+        fltk.cercle(
+            cell.x * board.padding, cell.y * board.padding, PRADIUS, remplissage="white"
+        )
         for cell in points
     ]
 
 
 def get_cell_from_click(points: set[Cell], board: Board) -> Cell:
-    spacing = get_spacing(board)
+    """Get the nearest clicked cell
+
+    Parameters
+    ----------
+    points : set[Cell]
+        set of possibles cells
+    board : Board
+        board
+
+    Returns
+    -------
+    Cell
+        clicked cell
+    """
     cell = Cell(fltk.abscisse_souris(), fltk.ordonnee_souris())
 
     for point in points:
-        p = Cell(point.x * spacing, point.y * spacing)
-        if distance(p, cell) < 5:
+        p = Cell(point.x * board.padding, point.y * board.padding)
+        if distance(p, cell) < PRADIUS:
             return point
     return None
 
@@ -113,13 +151,14 @@ def get_color(a: Cell, b: Cell) -> Color:
 
 
 def draw_trajectory(trajectory: list[Cell], board: Board) -> list[int]:
-    spacing = get_spacing(board)
-
     if len(trajectory) == 1:
         point = trajectory[0]
         return [
             fltk.cercle(
-                point.x * spacing, point.y * spacing, PRADIUS, remplissage="blue"
+                point.x * board.padding,
+                point.y * board.padding,
+                PRADIUS,
+                remplissage="blue",
             )
         ]
 
@@ -127,8 +166,8 @@ def draw_trajectory(trajectory: list[Cell], board: Board) -> list[int]:
     tags = []
     for a, b in points:
         color = get_color(a, b).hex()
-        ax, ay = a.x * spacing, a.y * spacing
-        bx, by = b.x * spacing, b.y * spacing
+        ax, ay = a.x * board.padding, a.y * board.padding
+        bx, by = b.x * board.padding, b.y * board.padding
         tags.append(fltk.cercle(ax, ay, PRADIUS, remplissage=color))
         tags.append(fltk.cercle(bx, by, PRADIUS, remplissage=color))
         tags.append(fltk.ligne(ax, ay, bx, by, epaisseur=2, couleur=color))
@@ -136,7 +175,9 @@ def draw_trajectory(trajectory: list[Cell], board: Board) -> list[int]:
 
 
 def create_window_board(board: list[str], block_size: int) -> None:
-    fltk.cree_fenetre(*map_coordinates(len(board[0]) - 1, len(board) - 1, block_size))
+    width = len(board[0]) - 1
+    height = len(board) - 1
+    fltk.cree_fenetre(width * block_size, height * block_size)
 
 
 def create_window_image(image_path: str) -> fltk.PhotoImage:
