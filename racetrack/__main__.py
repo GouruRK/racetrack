@@ -42,6 +42,7 @@ def main():
             solve(board, SOLVERS[args["solve"]], args["time"], args["rule"])
     else:
         play(board, args["rule"])
+    fltk.ferme_fenetre()
 
 
 if __name__ == "__main__":

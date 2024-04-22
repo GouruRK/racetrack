@@ -1,3 +1,6 @@
+"""Contains the default values and parameters for the game
+"""
+
 __all__ = [
     "DEFAULT_SPACING",
     "TEXT_MODE",

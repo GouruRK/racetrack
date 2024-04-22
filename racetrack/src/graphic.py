@@ -139,11 +139,33 @@ def get_cell_from_click(points: set[Cell], board: Board) -> Cell:
 
 
 def erase_tags(tags: list[int]) -> None:
+    """Erase all drawn objects from the window based on their given tags
+
+    Parameters
+    ----------
+    tags : list[int]
+        list of tags
+    """
     for tag in tags:
         fltk.efface(tag)
 
 
 def get_color(a: Cell, b: Cell) -> Color:
+    """Get a color from two cells. The color is based on the distance
+    between them. The furhest their are, the redder the color will be
+
+    Parameters
+    ----------
+    a : Cell
+        first cell
+    b : Cell
+        second cell
+
+    Returns
+    -------
+    Color
+        associated color
+    """
     dist = int(distance(a, b)) * 10
     if dist >= len(GRADIENTS):
         return Color.RED
@@ -151,6 +173,20 @@ def get_color(a: Cell, b: Cell) -> Color:
 
 
 def draw_trajectory(trajectory: list[Cell], board: Board) -> list[int]:
+    """Draw a representation of trajectory (a list of cells)
+
+    Parameters
+    ----------
+    trajectory : list[Cell]
+        cells that indicate the player's steps
+    board : Board
+        board
+
+    Returns
+    -------
+    list[int]
+        list of tags needed to draw the trajectory
+    """
     if len(trajectory) == 1:
         point = trajectory[0]
         return [
@@ -175,12 +211,33 @@ def draw_trajectory(trajectory: list[Cell], board: Board) -> list[int]:
 
 
 def create_window_board(board: list[str], block_size: int) -> None:
+    """Initiate fltk's window in order to correctly display a text-based board
+
+    Parameters
+    ----------
+    board : list[str]
+        board to draw
+    block_size : int
+        padding between each block
+    """
     width = len(board[0]) - 1
     height = len(board) - 1
     fltk.cree_fenetre(width * block_size, height * block_size)
 
 
 def create_window_image(image_path: str) -> fltk.PhotoImage:
+    """Initiate fltk's window in order to correctly display an image-based board
+
+    Parameters
+    ----------
+    image_path : str
+        path to the image
+
+    Returns
+    -------
+    fltk.PhotoImage
+        image object
+    """
     fltk.cree_fenetre(500, 500, redimension=True)
 
     image = fltk.PhotoImage(file=image_path)
