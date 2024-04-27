@@ -72,13 +72,11 @@ def astar(board: Board, rule: str) -> SearchType:
             heappush(heap, (distance(coord, average_finish_zone), new_traj))
     return board.trajectory
 
-
 def greedy(board: Board, rule: str) -> SearchType:
     heap = [(0, [start]) for start in board.start]
 
     while heap and not board.win():
         _, board.trajectory = heappop(heap)
-        t_traj = tuple(board.trajectory)
 
         yield board.trajectory
 
@@ -87,12 +85,26 @@ def greedy(board: Board, rule: str) -> SearchType:
             heappush(heap, (-distance(board.trajectory[-1], coord), new_traj))
     return board.trajectory
 
+def greedy2(board: Board, rule: str) -> SearchType:
+    heap = [(1, 0, [start]) for start in board.start]
+
+    while heap and not board.win():
+        _, _, board.trajectory = heappop(heap)
+
+        yield board.trajectory
+
+        for coord in next_coords(board, rule):
+            new_traj = board.trajectory + [coord]
+            heappush(heap, (-len(new_traj), -distance(board.trajectory[-1], coord), new_traj))
+    return board.trajectory
+
 
 SOLVERS = {
     "indepth": indepth_search,
     "breadth": breadth_search,
     "astar": astar,
     "greedy": greedy,
+    "greedy2": greedy2
 }
 
 
