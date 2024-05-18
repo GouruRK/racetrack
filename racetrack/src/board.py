@@ -156,11 +156,22 @@ class Board:
         elif len(trajectory) == 1:
             targets = trajectory[-1].neighbour()
         else:
-            a = trajectory[-1]
-            b = trajectory[-2]
-            vector = Cell(a.x - b.x, a.y - b.y)
+            vector = self.speed(trajectory)
             targets = (trajectory[-1] + vector).neighbour()
         return (targets & self.legal) - set(trajectory)
+
+    def speed(self, trajectory: list[Cell] = None) -> Cell:
+        if trajectory is None:
+            trajectory = self.trajectory
+            
+        if not trajectory:
+            return None
+        a = trajectory[-1]
+        if len(trajectory) == 1:
+            b = Cell(0, 0)
+        else:
+            b = trajectory[-2]
+        return Cell(a.x - b.x, a.y - b.y)
 
     def append(self, cell: Cell) -> None:
         """Add a coordinate to the trajectory

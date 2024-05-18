@@ -172,13 +172,11 @@ def get_color(a: Cell, b: Cell) -> Color:
     return GRADIENTS[dist]
 
 
-def draw_trajectory(trajectory: list[Cell], board: Board) -> list[int]:
+def draw_trajectory(board: Board) -> list[int]:
     """Draw a representation of trajectory (a list of cells)
 
     Parameters
     ----------
-    trajectory : list[Cell]
-        cells that indicate the player's steps
     board : Board
         board
 
@@ -187,8 +185,8 @@ def draw_trajectory(trajectory: list[Cell], board: Board) -> list[int]:
     list[int]
         list of tags needed to draw the trajectory
     """
-    if len(trajectory) == 1:
-        point = trajectory[0]
+    if len(board.trajectory) == 1:
+        point = board.trajectory[0]
         return [
             fltk.cercle(
                 point.x * board.padding,
@@ -198,7 +196,7 @@ def draw_trajectory(trajectory: list[Cell], board: Board) -> list[int]:
             )
         ]
 
-    points = zip(trajectory, trajectory[1:])
+    points = zip(board.trajectory, board.trajectory[1:])
     tags = []
     for a, b in points:
         color = get_color(a, b).hex()

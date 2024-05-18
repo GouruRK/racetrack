@@ -40,11 +40,11 @@ def play(board: Board, rule: str) -> None:
                 waiting = False
                 graphic.erase_tags(tags)
                 board.append(cell)
-                tags.extend(graphic.draw_trajectory(board.trajectory, board))
+                tags.extend(graphic.draw_trajectory(board))
         elif event == "BackSpace":
             if board.pop():
                 graphic.erase_tags(tags)
-                tags = graphic.draw_trajectory(board.trajectory, board)
+                tags = graphic.draw_trajectory(board)
                 waiting = False
 
     if event == "Quitte":
