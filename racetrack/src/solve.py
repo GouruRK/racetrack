@@ -15,8 +15,8 @@ SearchType = Generator[list[Cell], None, list[Cell]]
 
 def format_time(seconds: float):
     if seconds < 60:
-        return f"{seconds:.2}s"
-    return f"{seconds // 60}m {seconds - 60*(seconds//60):.2}s"
+        return f"{seconds:.2f}s"
+    return f"{seconds // 60}m {seconds - 60*(seconds//60):.2f}s"
 
 def next_coords(board: Board, rule: str) -> set[Cell]:
     if rule == LAX_RULE:
